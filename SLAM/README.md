@@ -104,14 +104,17 @@ $$
 
 **5. Rotation.** The angle $`\alpha`$ comes from the centered points:
 
-$$
-\begin{bmatrix} \cos\alpha \\ \sin\alpha \end{bmatrix}
+```math
+\left[\begin{array}{c}
+\cos\alpha \\[6pt]
+\sin\alpha
+\end{array}\right]
 = \frac{1}{N}
-\begin{bmatrix}
-\sum_i \left( r'_{x} l'_{x} + r'_{y} l'_{y} \right) \\[4pt]
-\sum_i \left( -r'_{x} l'_{y} + r'_{y} l'_{x} \right)
-\end{bmatrix}
-$$
+\left[\begin{array}{c}
+\displaystyle\sum_{i=1}^{m} \left( r'_{i,x}\, l'_{i,x} + r'_{i,y}\, l'_{i,y} \right) \\[14pt]
+\displaystyle\sum_{i=1}^{m} \left( -\,r'_{i,x}\, l'_{i,y} + r'_{i,y}\, l'_{i,x} \right)
+\end{array}\right]
+```
 
 where $`N`$ is the norm of that vector:
 
