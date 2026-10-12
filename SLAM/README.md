@@ -121,9 +121,12 @@ $$
 
 with the rotation matrix
 
-$$
-R = \begin{bmatrix} \cos\alpha & -\sin\alpha \\ \sin\alpha & \cos\alpha \end{bmatrix}
-$$
+```math
+R = \left[\begin{array}{rr}
+\cos\alpha & -\sin\alpha \\[6pt]
+\sin\alpha & \cos\alpha
+\end{array}\right]
+```
 
 **Correcting the pose.** A point $`p`$ and the heading $`\theta`$ are corrected with
 
