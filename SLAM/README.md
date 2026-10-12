@@ -73,35 +73,63 @@ minimize  Σᵢ ‖λ·R·lᵢ + t − rᵢ‖²
 
 **Derivation sketch**
 
-1. Center both point sets on their centroids: l̄ = (1/m)·Σlᵢ, r̄ = (1/m)·Σrᵢ, l'ᵢ = lᵢ − l̄, r'ᵢ = rᵢ − r̄.
-2. In centered coordinates the cost splits into a rotation/scale term and a translation term, because the cross term vanishes (Σl'ᵢ = Σr'ᵢ = 0):
+**1. Center both point sets** on their centroids:
 
-```
-Σ ‖λRl'ᵢ − r'ᵢ‖²  +  m·‖t'‖²,     where t' = λR·l̄ + t − r̄
-```
+$$
+\bar{l} = \frac{1}{m}\sum_{i=1}^{m} l_i, \qquad
+\bar{r} = \frac{1}{m}\sum_{i=1}^{m} r_i, \qquad
+l'_i = l_i - \bar{l}, \qquad
+r'_i = r_i - \bar{r}
+$$
 
-3. The second term is minimized by t' = 0, so t = r̄ − λR·l̄.
-4. The scale is estimated from the ratio of spreads (‖Rl'ᵢ‖ = ‖l'ᵢ‖, so R is not needed):
+**2. Split the cost.** Substituting the centered points, the cost separates into a rotation/scale term and a translation term. The cross term vanishes because $`\sum_i l'_i = \sum_i r'_i = 0`$:
 
-```
-λ = sqrt( Σ‖r'ᵢ‖² / Σ‖l'ᵢ‖² )
-```
+$$
+\sum_{i=1}^{m} \left\lVert \lambda R l_i + t - r_i \right\rVert^2
+= \sum_{i=1}^{m} \left\lVert \lambda R l'_i - r'_i \right\rVert^2 + m \left\lVert t' \right\rVert^2,
+\qquad t' = \lambda R \bar{l} + t - \bar{r}
+$$
 
-5. The rotation angle α comes from the centered points:
+**3. Translation.** The second term is minimized when $`t' = 0`$, which gives
 
-```
-cos α = Σ(r'ₓl'ₓ + r'ᵧl'ᵧ) / N
-sin α = Σ(−r'ₓl'ᵧ + r'ᵧl'ₓ) / N
-```
+$$
+t = \bar{r} - \lambda R \bar{l}
+$$
 
-where N is the norm of the vector (Σ(r'ₓl'ₓ + r'ᵧl'ᵧ), Σ(−r'ₓl'ᵧ + r'ᵧl'ₓ)).
+**4. Scale.** Rotation preserves length, so $`\lVert R l'_i \rVert = \lVert l'_i \rVert`$ and $`R`$ is not needed to estimate $`\lambda`$:
 
-To correct a point p and the heading θ:
+$$
+\lambda = \sqrt{\frac{\sum_{i=1}^{m} \lVert r'_i \rVert^2}{\sum_{i=1}^{m} \lVert l'_i \rVert^2}}
+$$
 
-```
-p'    = λ·R·p + t
-θ'    = θ + α
-```
+**5. Rotation.** The angle $`\alpha`$ comes from the centered points:
+
+$$
+\begin{bmatrix} \cos\alpha \\ \sin\alpha \end{bmatrix}
+= \frac{1}{N}
+\begin{bmatrix}
+\sum_i \left( r'_{x} l'_{x} + r'_{y} l'_{y} \right) \\[4pt]
+\sum_i \left( -r'_{x} l'_{y} + r'_{y} l'_{x} \right)
+\end{bmatrix}
+$$
+
+where $`N`$ is the norm of that vector:
+
+$$
+N = \sqrt{\left(\sum_i \left( r'_{x} l'_{x} + r'_{y} l'_{y} \right)\right)^2 + \left(\sum_i \left( -r'_{x} l'_{y} + r'_{y} l'_{x} \right)\right)^2}
+$$
+
+with the rotation matrix
+
+$$
+R = \begin{bmatrix} \cos\alpha & -\sin\alpha \\ \sin\alpha & \cos\alpha \end{bmatrix}
+$$
+
+**Correcting the pose.** A point $`p`$ and the heading $`\theta`$ are corrected with
+
+$$
+p' = \lambda R p + t, \qquad \theta' = \theta + \alpha
+$$
 
 **Procedure at each time step:** predict the pose with the motion model, re-detect and re-pair landmarks, compute the similarity transform, and correct the pose. Previous corrections carry forward, so motion-model error does not accumulate.
 
